@@ -8,3 +8,5 @@ Format: `## [YYYY-MM-DD] operation | description`
 
 ## [2026-05-03] init | Created v0.1.0 of the team during AAUClubManager bootstrap session. 8 agents, 6 shared protocols, templates, init script.
 ## [2026-05-03] update | v0.1.1 — Added market research as PM responsibility (per user feedback during same bootstrap session).
+## [2026-05-03] update | v0.1.2 — Added Phase Kickoff Brief protocol. TPM files at phase start; Architect supplies tech deps, PM supplies product/legal deps. Surfaces external dependencies (accounts, API keys, approvals) prominently so user can handle in parallel with agents.
+## [2026-05-03] update | v0.1.3 — Added Phase Deliverables & Approval Gates protocol. Two gates per phase: Gate 1 = PDD (PM) + UI Mocks (UX); Gate 2 = OpenAPI spec (Architect). Dev Manager cannot pick up engineering work until both gates pass. Per user feedback that all PDDs, mocks, and API specs require explicit approval before execution.

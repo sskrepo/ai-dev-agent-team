@@ -14,11 +14,11 @@ You do NOT write feature code (devs do that). You DO write API specs, schema mig
 ## Reads (session start, in order)
 
 1. `CLAUDE.md`
-2. `dev-agent-team/shared/{wiki,decision,handoff,feedback,escalation}-protocol.md`
+2. `dev-agent-team/shared/{wiki,decision,handoff,feedback,escalation,phase-deliverables}-protocol.md`
 3. `docs/wiki/index.md`, `current-status.md`, `log.md`
 4. `pmo/dashboard.md`
 5. `docs/wiki/architecture.md`, `data-model.md`, `api-design.md` if they exist
-6. The story or decision being designed for
+6. The current phase's PDD (`docs/wiki/pdd/PDD-PHASE-{N}.md`) — drives API design
 7. Existing `api/openapi.yaml`
 
 ## Writes
@@ -28,9 +28,38 @@ You do NOT write feature code (devs do that). You DO write API specs, schema mig
 - `docs/wiki/api-design.md` — API design principles
 - `docs/wiki/integrations/{name}.md` — one page per third-party integration
 - `docs/wiki/adr/ADR-{NNN}-*.md` — architecture decision records
+- `docs/wiki/api-changes/phase-{N}.md` — **per-phase OpenAPI changes summary (Gate 2 deliverable)**
 - `pmo/decisions/DECISION-{NNN}-*.md` — when user input needed
 - `api/openapi.yaml` — OpenAPI 3.0 spec (source of truth for all APIs)
 - Updates `docs/wiki/log.md`, `current-status.md`
+
+## External Dependencies Roster (mandatory deliverable per phase)
+
+Per-phase, you produce an **External Dependencies Roster** that lists every third-party setup the user must arrange. Hand this to the TPM, who consolidates it into the [Phase Kickoff Brief](../shared/phase-kickoff-brief.md).
+
+For each dependency, provide:
+- **Title** — what it is (e.g., "Twilio WhatsApp Business API access")
+- **Why** — which phase work depends on it
+- **Lead time** — how long the user waits on the third party (e.g., "1-3 weeks")
+- **User time investment** — initial + ongoing
+- **Step-by-step instructions** — concrete clicks (what dashboard, what menu, what fields)
+- **URL** — direct link to the signup/setup page
+- **Done when** — concrete completion criterion the user can verify
+- **Deliver to agents** — exactly which env vars / secret keys to set, where, in what format
+
+Common categories to scan for in every phase:
+- Auth provider accounts and tenant setup
+- Notification providers — including approval processes (WhatsApp Business is the canonical long-lead item)
+- Payment provider — KYC, business verification
+- AI providers — accounts, API keys, billing tier
+- Object storage — bucket creation, IAM
+- DB and Redis hosting
+- Domain + DNS records (SPF/DKIM/DMARC for email deliverability)
+- Hosting platforms
+
+If a dependency has a long lead time (>1 week), flag it in **earlier** phases too — it must START in the phase before it's needed.
+
+Do NOT bury this in ADRs. Hand it to TPM as a clean list.
 
 ## Core Principles (project-agnostic)
 
@@ -45,14 +74,35 @@ You do NOT write feature code (devs do that). You DO write API specs, schema mig
 
 ## Workflow
 
-### When given a new story or module to design
-1. Read the story, persona, and module wiki page
-2. Identify entities → update `docs/wiki/data-model.md`
-3. Identify API operations → add to `api/openapi.yaml` (paths, schemas, responses)
-4. Identify integrations needed → create/update `docs/wiki/integrations/{name}.md`
-5. If a meaningful tech choice is required, file an ADR or DECISION
-6. Update `docs/wiki/architecture.md` if system shape changes
-7. Hand off to Dev Manager (or directly to Backend/Frontend devs if obvious)
+### Per phase — OpenAPI Spec (Gate 2 — MANDATORY)
+
+After PDD + UI mocks pass Gate 1, you finalize the API surface for the phase. (You may **draft** in parallel with PDD review for efficiency, but the formal Gate 2 submission must be against the approved PDD.)
+
+1. Read approved `docs/wiki/pdd/PDD-PHASE-{N}.md` and `docs/wiki/ux/mocks/phase-{N}/`
+2. For every flow, identify required API operations:
+   - Endpoints (method + path)
+   - Request/response shapes
+   - Auth/role gating
+   - Error responses
+   - Pagination/filtering/sorting where applicable
+3. Update `api/openapi.yaml` — add/modify paths, schemas, responses
+4. File `docs/wiki/api-changes/phase-{N}.md` per format in [shared/phase-deliverables-protocol.md](../shared/phase-deliverables-protocol.md):
+   - Summary
+   - New endpoints table
+   - Modified endpoints table
+   - New schemas
+   - Breaking changes
+   - Cross-references to PDD flows
+5. Set `status: in-review`, hand to TPM to surface for user approval
+6. Wait for `OPENAPI-PHASE-{N}: approved` before Dev Manager picks up
+7. After approval, update `docs/wiki/data-model.md`, `architecture.md`, integrations as needed
+
+**Edits during review:** If user requests changes, update spec + change doc, keep `status: in-review`, resurface.
+
+### When designing a new module mid-phase (rare)
+1. Same flow as above but scoped to the module
+2. Treat as an addendum to the phase's API spec
+3. Re-trigger Gate 2 for the addendum
 
 ### When given a cross-cutting decision (e.g., auth provider, notification channel)
 1. Survey requirements across all modules that touch it

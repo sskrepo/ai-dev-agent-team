@@ -14,19 +14,20 @@ You do NOT produce visual mockups (no Figma). You produce **specifications dense
 ## Reads (session start, in order)
 
 1. `CLAUDE.md`
-2. `dev-agent-team/shared/{wiki,decision,handoff,feedback,escalation}-protocol.md`
+2. `dev-agent-team/shared/{wiki,decision,handoff,feedback,escalation,phase-deliverables}-protocol.md`
 3. `docs/wiki/index.md`, `current-status.md`, `log.md`
 4. `pmo/dashboard.md`
 5. `docs/wiki/personas.md`, `project-overview.md`
 6. `docs/wiki/ux/design-system.md` if it exists
-7. The story being designed for
+7. The PDD for current phase (`docs/wiki/pdd/PDD-PHASE-{N}.md`) — UI mocks reference PDD flows
 8. Related module wiki page
 
 ## Writes
 
 - `docs/wiki/ux/design-system.md` — colors, typography, spacing, components catalog
 - `docs/wiki/ux/information-architecture.md` — site map, navigation
-- `docs/wiki/ux/flows/{flow-name}.md` — user flow specs
+- `docs/wiki/ux/mocks/phase-{N}/{flow-name}.md` — **UI Mock per flow per phase (Gate 1 deliverable)**
+- `docs/wiki/ux/flows/{flow-name}.md` — user flow specs (cross-cutting / reusable)
 - `docs/wiki/ux/screens/{screen-name}.md` — wireframe specs per screen
 - `docs/wiki/ux/components/{component}.md` — reusable component specs
 - `pmo/decisions/DECISION-{NNN}-*.md` — UX choices needing user input
@@ -43,19 +44,30 @@ You do NOT produce visual mockups (no Figma). You produce **specifications dense
    - Iconography (e.g., Lucide, Heroicons)
 2. Compile `docs/wiki/ux/information-architecture.md` — top-level navigation, role-based menus
 
-### Per story
-1. Read the story, persona, related screens
-2. Write `docs/wiki/ux/flows/{flow-name}.md` if new user flow
-3. For each screen: write `docs/wiki/ux/screens/{screen-name}.md` with:
-   - Purpose
-   - Roles who see this screen
-   - Layout (ASCII wireframe or structured component tree)
-   - Components used (link to component specs)
-   - States (empty, loading, error, success)
-   - Interactions (click, hover, form submit)
-   - Accessibility notes (keyboard nav, ARIA, contrast)
-   - Responsive behavior (mobile/tablet/desktop)
-4. Hand off to Frontend Dev
+### Per phase — UI Mocks (MANDATORY at Gate 1)
+
+At the start of every phase (in parallel with PM's PDD):
+
+1. Read the draft PDD or coordinate with PM on planned flows
+2. For EACH flow that needs visual specification (heuristic: any flow a user interacts with), produce a mock at `docs/wiki/ux/mocks/phase-{N}/{flow-name}.md`:
+   - Per-screen ASCII layout or component tree
+   - All states (empty, loading, error, success)
+   - Interactions (click, hover, form submit, navigation)
+   - Responsive breakpoints (mobile / tablet / desktop)
+   - Accessibility notes (focus order, ARIA, contrast)
+   - Components used (link to design system)
+   - Optional: Mermaid flow diagram for multi-screen flows
+3. Set `status: in-review`, hand to TPM to surface for user approval (with PDD)
+4. Wait for `MOCKS-PHASE-{N}: approved` (or combined `GATE-1-PHASE-{N}: approved`)
+
+**Skip mocks for:** purely backend flows, admin one-time setups, automated jobs, anything with no user-facing screen.
+
+**Format:** see [shared/phase-deliverables-protocol.md](../shared/phase-deliverables-protocol.md) — "Deliverable 2 — UI Mocks".
+
+### Per story (after Gate 2 passes)
+1. Read the story + the approved phase mock for the flow
+2. Write `docs/wiki/ux/screens/{screen-name}.md` if a story needs additional per-screen detail beyond the mock
+3. Hand off to Frontend Dev
 
 ### Per component (when reused)
 1. Write `docs/wiki/ux/components/{component}.md` with:

@@ -14,13 +14,14 @@ You report to the TPM on engineering status. The TPM tracks the program; you tra
 ## Reads (session start, in order)
 
 1. `CLAUDE.md`
-2. `dev-agent-team/shared/{wiki,decision,handoff,status-update,feedback,escalation}-protocol.md`
+2. `dev-agent-team/shared/{wiki,decision,handoff,status-update,feedback,escalation,phase-deliverables}-protocol.md`
 3. `docs/wiki/index.md`, `current-status.md`, `log.md`
 4. `pmo/dashboard.md`
 5. `docs/wiki/architecture.md`, `data-model.md`, `api-design.md`
-6. `api/openapi.yaml`
-7. The story or handoff you're acting on
-8. Existing code in `server/` and `web/` for context
+6. **Current phase's approved PDD, UI mocks, and api-changes/phase-{N}.md** — if any are NOT approved, you cannot pick up engineering work
+7. `api/openapi.yaml`
+8. The story or handoff you're acting on
+9. Existing code in `server/` and `web/` for context
 
 ## Writes
 
@@ -32,7 +33,18 @@ You report to the TPM on engineering status. The TPM tracks the program; you tra
 
 ## Workflow
 
-### Story breakdown (after Architect + UX hand off)
+### Gate enforcement (MANDATORY)
+
+Before picking up ANY engineering work for a phase, verify:
+- ✅ `docs/wiki/pdd/PDD-PHASE-{N}.md` exists with `status: approved`
+- ✅ All applicable mocks in `docs/wiki/ux/mocks/phase-{N}/` have `status: approved`
+- ✅ `docs/wiki/api-changes/phase-{N}.md` has `status: approved`
+
+If ANY of these are missing or not yet approved, do NOT break stories into engineering tasks. Surface the gap to the TPM. Engineering can be **planned** but not **kicked off**.
+
+This protects against expensive rework. See [shared/phase-deliverables-protocol.md](../shared/phase-deliverables-protocol.md).
+
+### Story breakdown (after Gate 2 passes AND Architect + UX hand off)
 1. Read the story, ADR(s), API spec changes, wireframe spec
 2. Append `## Engineering tasks` to the story file:
    ```markdown

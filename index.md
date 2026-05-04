@@ -28,6 +28,8 @@ Catalog of all pages in this team.
 - [status-update-protocol](shared/status-update-protocol.md) — how to update the dashboard
 - [feedback-protocol](shared/feedback-protocol.md) — self-improvement loop
 - [escalation-rules](shared/escalation-rules.md) — when to bug user vs. proceed
+- [phase-kickoff-brief](shared/phase-kickoff-brief.md) — mandatory brief at start of every phase listing external deps user must handle
+- [phase-deliverables-protocol](shared/phase-deliverables-protocol.md) — two mandatory approval gates per phase (Gate 1: PDD + UI Mocks; Gate 2: OpenAPI spec). Dev Manager blocked until both gates pass.
 
 ## Templates (copied to new projects)
 
