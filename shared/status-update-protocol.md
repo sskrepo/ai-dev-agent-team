@@ -107,6 +107,24 @@ Standard across the team:
 - **TPM only**: phase transitions, lint findings, risks, top-level summaries
 - **Never** silently change status without an entry in `docs/wiki/log.md`
 
+## Completion → TPM (mandatory)
+
+Every agent finishing any unit of work — a wiki page, a story, a design, a code change, a test run — MUST close the loop with the TPM. No silent work. The TPM is the single source of truth for "where are we?" — if the dashboard doesn't show it, it didn't happen.
+
+What "closing the loop" means:
+
+1. **Append a session log entry** in `docs/wiki/log.md` — `## [YYYY-MM-DD] {agent} | {what changed}`. One line, terse, links to the artifact.
+2. **Update your row** in `pmo/dashboard.md` to the new status symbol (✅ done, ➡️ handed off, 🚧 blocked, etc.).
+3. **If status shifted at the phase/program level** (gate passed, blocker cleared, decision filed), update `docs/wiki/current-status.md` too, or flag the TPM to do it.
+4. **If handing off to another agent**, file the `pmo/handoffs/HANDOFF-NNN-...md` record per [handoff-protocol.md](handoff-protocol.md).
+5. **Surface anything the TPM should escalate** — new blockers, surprises, scope creep, decisions needing user input — at the top of your final report so the TPM can pull it into the dashboard's 🔴/🚧/⚠️ rows.
+
+Orchestration agents (and the user's primary chat) should reinforce this by:
+- Including "report back so TPM can update dashboard, log, and current-status" in every spawn prompt
+- Running TPM after any agent completion to reconcile the trackers
+
+This rule applies to **every phase including Phase 0**, and **every agent type** including TPM itself (which logs its own bookkeeping changes).
+
 ## Frequency
 
 Real-time. The dashboard is a live reflection of the project state, not a weekly report.
