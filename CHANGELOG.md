@@ -13,6 +13,18 @@ Format:
 
 ---
 
+## [0.1.4] — 2026-05-03
+
+### Added — tpm + new shared protocol + template
+- New shared protocol: [`shared/pending-decisions-protocol.md`](shared/pending-decisions-protocol.md). Defines a **single user-facing surface for "what's waiting on me?"** organized as one file per phase under `pmo/pending-decisions/`. Sections per file: 🚨 blocking, 🟡 mid-phase, 📝 open product questions, 🔮 future-phase pre-knowns, ✅ done. TPM-owned but updatable by any agent when user delivers items in chat. Reconciles with `dashboard.md` awaiting-user surface and `current-status.md`. File states: `active` (current phase), `preview` (future with pre-knowns), `placeholder` (future, no items yet), `done` (phase exited).
+- TPM: now reads `pmo/pending-decisions/PHASE-{current}.md` at session start (item #7). Now writes/owns the directory. Phase-transition workflow includes marking prior phase file `status: done` and activating next phase file (promote 🔮 pre-knowns to appropriate severity buckets). Weekly lint includes pending-decisions consistency checks.
+- Status update protocol: now lists pending-decisions as the third live tracking surface (alongside dashboard and current-status). Any agent that learns of a user delivery moves the row to ✅ Done in the same change as dashboard reconciliation — not just TPM.
+- Template: `templates/pmo/pending-decisions/README.md` — bootstrap skeleton for new projects.
+  - **Why:** User feedback during AAUClubManager Phase 0 execution: "Can you pls create a directory pending decisions, and create md files per phase in it, so that I have one place to see what is waiting on me always, and also keep it updated when I completed my tasks." Then: "I think my previous instruction on 'pending decisions' should be going into TPM agent, so that for future projects I can benefit." Pattern initially built locally in AAUClubManager, then promoted to canonical here.
+  - **Source:** AAUClubManager Phase 0 execution session, 2026-05-03
+
+---
+
 ## [0.1.3] — 2026-05-03
 
 ### Added — pm, ux-designer, architect, dev-manager, tpm + new shared protocol

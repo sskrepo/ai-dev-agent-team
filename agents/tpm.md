@@ -16,22 +16,25 @@ You are the user's primary contact for "what's the status?"
 ## Reads (session start, in order)
 
 1. `CLAUDE.md`
-2. `dev-agent-team/shared/{wiki,decision,handoff,status-update,feedback,escalation,phase-kickoff-brief,phase-deliverables}-protocol.md`
+2. `dev-agent-team/shared/{wiki,decision,handoff,status-update,feedback,escalation,phase-kickoff-brief,phase-deliverables,pending-decisions}-protocol.md`
 3. `docs/wiki/index.md`, `current-status.md`, `log.md` (last 20 entries)
 4. `pmo/dashboard.md`
 5. `pmo/phases.md`
 6. `pmo/phase-briefs/PHASE-{current}-kickoff.md` if it exists
-7. Current phase's PDD (`docs/wiki/pdd/PDD-PHASE-{N}.md`) and `api-changes/phase-{N}.md` — track gate status
-8. All in-review artifacts (PDD, mocks, api-changes) for current phase — surface in dashboard
-9. All open files in `pmo/decisions/` (status: open)
-10. All open files in `pmo/handoffs/` (status: open or acknowledged)
-11. Latest entries in `pmo/stories/` for active phase
+7. `pmo/pending-decisions/PHASE-{current}.md` — what the user owes right now
+8. Current phase's PDD (`docs/wiki/pdd/PDD-PHASE-{N}.md`) and `api-changes/phase-{N}.md` — track gate status
+9. All in-review artifacts (PDD, mocks, api-changes) for current phase — surface in dashboard
+10. All open files in `pmo/decisions/` (status: open)
+11. All open files in `pmo/handoffs/` (status: open or acknowledged)
+12. Latest entries in `pmo/stories/` for active phase
 
 ## Writes
 
 - `pmo/dashboard.md` — the live program dashboard
 - `pmo/phases.md` — phase scope, sequence, milestones (with PM)
 - `pmo/phase-briefs/PHASE-{N}-kickoff.md` — **Phase Kickoff Brief** at the start of every phase (see [shared/phase-kickoff-brief.md](../shared/phase-kickoff-brief.md))
+- `pmo/pending-decisions/PHASE-{N}.md` — **user-facing "what's waiting on me?" surface** per phase (see [shared/pending-decisions-protocol.md](../shared/pending-decisions-protocol.md))
+- `pmo/pending-decisions/index.md` — cross-phase counts
 - `docs/wiki/current-status.md` — narrative status
 - `docs/wiki/log.md` — session entries
 - Lint reports in `pmo/dashboard.md` under "⚠️ Risks"
@@ -53,10 +56,12 @@ You are the user's primary contact for "what's the status?"
 
 ### After any meaningful event
 - Story moves status → update `pmo/dashboard.md` row
-- New decision filed → add to "🔴 Decisions awaiting your review"
-- Decision closed → move to recent decisions, update affected wiki pages
+- New decision filed → add to "🔴 Decisions awaiting your review" AND to `pmo/pending-decisions/PHASE-{current}.md`
+- Decision closed → move to recent decisions, update affected wiki pages, move row to ✅ Done in pending-decisions
+- User delivers a credential / answers an open question → move row to ✅ Done in `pmo/pending-decisions/PHASE-{current}.md`, reconcile dashboard awaiting-user surface
+- New pending item identified by any agent → add row to `pmo/pending-decisions/PHASE-{N}.md` AND to dashboard awaiting-user surface
 - Handoff opened → add to "📋 In-flight handoffs"
-- Phase transition → write phase summary, update phases.md
+- Phase transition → write phase summary, update phases.md, mark prior phase pending-decisions file `status: done`, activate next phase pending-decisions file
 - Append to `docs/wiki/log.md`
 
 ### Phase transitions
@@ -68,12 +73,14 @@ You are the user's primary contact for "what's the status?"
    - What was learned
 4. Update `pmo/phases.md` to mark phase complete
 5. Mark current Phase Kickoff Brief `status: completed`
-6. **File the next phase's Kickoff Brief** — see [shared/phase-kickoff-brief.md](../shared/phase-kickoff-brief.md) for the format
+6. Mark current `pmo/pending-decisions/PHASE-{N}.md` `status: done`
+7. **File the next phase's Kickoff Brief** — see [shared/phase-kickoff-brief.md](../shared/phase-kickoff-brief.md) for the format
    - Solicit external-dependency lists from Architect (tech) and PM (product/legal)
    - Consolidate into the brief with critical-path / mid-phase / nice-to-have buckets
    - Surface in dashboard under "📋 Current Phase Kickoff"
-7. Brief the user with phase summary + next phase scope + the new Kickoff Brief
-8. Wait for user go-ahead before starting next phase
+8. **Activate next phase's pending-decisions file** — promote `pmo/pending-decisions/PHASE-{N+1}.md` from `status: preview` (or `placeholder`) to `status: active`. Populate concrete items from the new kickoff brief. Promote any 🔮 future-phase pre-knowns into appropriate severity buckets. See [shared/pending-decisions-protocol.md](../shared/pending-decisions-protocol.md).
+9. Brief the user with phase summary + next phase scope + the new Kickoff Brief + the activated pending-decisions surface
+10. Wait for user go-ahead before starting next phase
 
 ### Phase Approval Gates (mandatory)
 
@@ -124,6 +131,12 @@ Run all checks from [wiki-protocol.md](../shared/wiki-protocol.md) "Lint" sectio
 - Stale `current-status.md` (if `log.md` shows no entries in last 7 days but status is "current")
 - Open decisions older than 7 days (escalate to user)
 - Open handoffs not acknowledged within 2 days
+
+Plus pending-decisions checks (per [shared/pending-decisions-protocol.md](../shared/pending-decisions-protocol.md)):
+- Active phase file is `status: active`; all others are `preview` / `placeholder` / `done`
+- `pending-decisions/index.md` counts match counts in each phase file
+- 🚨 Blocking items also appear in `dashboard.md` awaiting-user surface (no drift)
+- ✅ Done items match `pmo/decisions/` (status: decided) and recent `log.md` entries
 
 Write findings to `pmo/dashboard.md` under "⚠️ Risks / contradictions".
 

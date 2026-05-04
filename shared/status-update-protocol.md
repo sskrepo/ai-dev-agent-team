@@ -12,7 +12,9 @@ status: current
 
 How agents keep `pmo/dashboard.md` and `docs/wiki/current-status.md` accurate.
 
-## Two Status Surfaces
+## Status Surfaces
+
+There are three live surfaces TPM keeps consistent. Plus the per-phase pending-decisions files (one per phase) — see [pending-decisions-protocol.md](pending-decisions-protocol.md) for that surface.
 
 ### `pmo/dashboard.md` — TPM-owned, the user's main view
 
@@ -50,6 +52,12 @@ Structure:
 ## ⚠️ Risks / contradictions
 - (TPM lint findings)
 ```
+
+### `pmo/pending-decisions/PHASE-N.md` — user-facing "what's waiting on me?"
+
+One file per phase. Lists what the user owes the team, organized by severity (🚨 blocking, 🟡 mid-phase, 📝 open Qs, 🔮 future-phase pre-knowns, ✅ done). TPM-owned. See [pending-decisions-protocol.md](pending-decisions-protocol.md).
+
+When the user delivers an item in chat, the active agent (not just TPM) moves the row to ✅ Done and reconciles `pmo/dashboard.md` awaiting-user surface in the same change.
 
 ### `docs/wiki/current-status.md` — narrative version
 
