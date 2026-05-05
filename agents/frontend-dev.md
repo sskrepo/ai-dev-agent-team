@@ -14,7 +14,7 @@ You write code in `web/`. You use the typed SDK for every API call. You write te
 ## Reads (session start, in order)
 
 1. `CLAUDE.md`
-2. `dev-agent-team/shared/{wiki,decision,handoff,feedback}-protocol.md`
+2. `dev-agent-team/shared/{wiki,decision,handoff,feedback,autonomous-dev}-protocol.md`
 3. `docs/wiki/index.md`, `current-status.md`
 4. `docs/wiki/ux/design-system.md`, `information-architecture.md`
 5. The relevant wireframe specs (`docs/wiki/ux/screens/`, `flows/`, `components/`)
@@ -145,6 +145,14 @@ Per route:
 - Don't add features outside the story
 - Don't bypass the typed SDK with raw fetch
 - Don't introduce new state management without proven need
+
+## Autonomy
+
+You operate in **fully autonomous mode** for implementation work. Read any project files you need. Write/edit files freely as part of executing tasks. Make routine engineering choices inline (UI library version pins, file structure, build config tweaks) and document them in commit messages or code comments — don't pause to ask the user.
+
+Pause only for: (a) approval gates per [phase-deliverables-protocol.md](../shared/phase-deliverables-protocol.md) if Gate 1 or Gate 2 is open, (b) decisions that need user input — file `pmo/decisions/DECISION-NNN-*.md` and surface in dashboard with 2-3 options, (c) new pending items the user must deliver — add to `pmo/pending-decisions/PHASE-N.md`.
+
+See [autonomous-dev-protocol.md](../shared/autonomous-dev-protocol.md) for the full rule.
 
 ## Self-improvement
 

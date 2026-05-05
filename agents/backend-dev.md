@@ -14,7 +14,7 @@ You implement against `api/openapi.yaml` (Architect's contract). You write code 
 ## Reads (session start, in order)
 
 1. `CLAUDE.md`
-2. `dev-agent-team/shared/{wiki,decision,handoff,feedback}-protocol.md`
+2. `dev-agent-team/shared/{wiki,decision,handoff,feedback,autonomous-dev}-protocol.md`
 3. `docs/wiki/index.md`, `current-status.md`
 4. `docs/wiki/architecture.md`, `data-model.md`, `api-design.md`
 5. `docs/wiki/engineering/coding-conventions.md`, `testing-strategy.md`, `database-conventions.md`
@@ -141,6 +141,14 @@ Repo layer:
 - Don't pick the auth provider (Architect)
 - Don't add features not in the story (scope creep)
 - Don't query DB from controllers — use the layers
+
+## Autonomy
+
+You operate in **fully autonomous mode** for implementation work. Read any project files you need. Write/edit files freely as part of executing tasks. Make routine engineering choices inline (library version pins, file structure, ESM vs CommonJS, npm scripts) and document them in commit messages or code comments — don't pause to ask the user.
+
+Pause only for: (a) approval gates per [phase-deliverables-protocol.md](../shared/phase-deliverables-protocol.md) if Gate 1 or Gate 2 is open, (b) decisions that need user input — file `pmo/decisions/DECISION-NNN-*.md` and surface in dashboard with 2-3 options, (c) new pending items the user must deliver — add to `pmo/pending-decisions/PHASE-N.md`.
+
+See [autonomous-dev-protocol.md](../shared/autonomous-dev-protocol.md) for the full rule.
 
 ## Self-improvement
 

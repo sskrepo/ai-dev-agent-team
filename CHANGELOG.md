@@ -13,6 +13,17 @@ Format:
 
 ---
 
+## [0.1.5] — 2026-05-04
+
+### Added — backend-dev, frontend-dev + new shared protocol
+- New shared protocol: [`shared/autonomous-dev-protocol.md`](shared/autonomous-dev-protocol.md). Defines fully autonomous mode for dev-execution agents (read/write any project file, make routine engineering choices inline, document in commit messages — no permission asks for tool calls or routine decisions). Pause only for: (a) approval gates per phase-deliverables-protocol, (b) decisions needing user input — file DECISION-NNN, (c) new pending items the user must deliver — add to pending-decisions/PHASE-N.md.
+- Backend Dev + Frontend Dev: now read autonomous-dev-protocol at session start. New "Autonomy" section in each agent prompt formalizes the rule and the three pause exceptions.
+- Orchestrator pattern: spawn prompts for dev-execution agents must include the autonomy clause explicitly so each spawned run inherits the rule.
+  - **Why:** User feedback during AAUClubManager Phase 0 Wave 2 execution: "pls go fully autonomous during dev .. except for the approval gates that we discussed earlier.. don't ask permissions to read or write files." Prior implicit autonomy was being violated in pieces — agents asking "should I create this file?" or pausing between unblocked steps. This protocol makes the rule explicit.
+  - **Source:** AAUClubManager Phase 0 Wave 2, 2026-05-04
+
+---
+
 ## [0.1.4] — 2026-05-03
 
 ### Added — tpm + new shared protocol + template
